@@ -33,7 +33,7 @@ def api_endpoint(req: MessageRequest):
     else:
         return {
         "status": "success",
-        "reply": f"{req.input_text}は{len(req.input_text)}文字です。",
+        "reply": f"النص {req.input_text} يتكون من {len(req.input_text)} حرفًا.",
         }
 
 

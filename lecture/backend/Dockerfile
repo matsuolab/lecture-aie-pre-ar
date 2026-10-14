@@ -1,27 +1,27 @@
-# --- ビルド用ステージ ---
+# --- مرحلة البناء ---
 FROM python:3.12-slim AS builder
 
 WORKDIR /app
 
-# 仮想環境を作成
+# إنشاء بيئة افتراضية
 RUN python -m venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
 COPY requirements.txt .
-# && で順番に実行
+# التنفيذ بالتتابع باستخدام &&
 RUN pip install --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
 
-# --- 実行用ステージ ---
+# --- مرحلة التشغيل ---
 FROM python:3.12-slim AS runner
 WORKDIR /app
 
-# ビルドステージから仮想環境ごとコピー
+# نسخ البيئة الافتراضية بالكامل من مرحلة البناء
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
-# アプリケーションコードを配置
+# وضع شيفرة التطبيق في موضعها
 COPY . /app/
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
